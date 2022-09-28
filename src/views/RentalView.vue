@@ -13,7 +13,7 @@
 
                     <v-divider class="mx-4" inset vertical></v-divider>
 
-                    <v-dialog v-model="dialog" max-width="500px" content-class="round">
+                    <v-dialog v-model="dialog" max-width="500px" persistent content-class="round">
 
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn class="elevation-5" color="blue" dark v-bind="attrs" v-on="on">
@@ -103,9 +103,9 @@
                       </v-card>
                     </v-dialog>
 
-                    <v-dialog v-model="dialogDelete" max-width="370px">
+                    <v-dialog v-model="dialogDelete" max-width="455px" persistent content-class="round">
                       <v-card>
-                        <v-card-title class="text-h5">Você quer realmente deletar?</v-card-title>
+                        <v-card-title class="headline"><span>Você quer realmente deletar?</span></v-card-title>
                         <v-card-actions>
                           <v-spacer></v-spacer>
                           <v-btn color="blue darken-1" text @click="closeDelete">Cancelar</v-btn>
@@ -115,7 +115,7 @@
                       </v-card>
                     </v-dialog>
 
-                    <v-dialog v-model="dialog2" max-width="370px" content-class="round">
+                    <v-dialog v-model="dialog2" max-width="370px" persistent content-class="round">
                       <v-card>
 
                         <v-card-title class="headline"> <v-spacer></v-spacer> <span class="mt-2 mb-4">Devolver o livro</span> <v-spacer></v-spacer> </v-card-title>

@@ -88,7 +88,7 @@
                       </v-card>
                     </v-dialog>
 
-                    <v-dialog v-model="dialogDelete" max-width="455px" content-class="round">
+                    <v-dialog v-model="dialogDelete" max-width="455px" persistent content-class="round">
                       <v-card>
                         <v-card-title class="headline"><span>Você quer realmente deletar?</span></v-card-title>
 
@@ -276,6 +276,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
+      this.$refs.form.resetValidation();
     },
 
     closeDelete() {
@@ -315,7 +316,7 @@ export default {
     async BookDelete() {
       await BookDataService.delete(this.editedIndex).then(() => this.listBooks()).then(() => this.showAlertSuccessDelete())
         .catch((e) => {
-          this.showAlertError()
+          this.showAlertError2()
           console.log(e)
         })
     },
@@ -336,7 +337,7 @@ export default {
       this.$swal("Oops...", "Algum erro aconteceu!", "error");
     },
 
-    showAlertError() {
+    showAlertError2() {
       this.$swal("Oops...", "Esse livro está alugado!", "error");
     },
 

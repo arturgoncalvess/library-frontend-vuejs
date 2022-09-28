@@ -67,7 +67,7 @@
 
                     </v-dialog>
 
-                    <v-dialog v-model="dialogDelete" max-width="455px"  content-class="round">
+                    <v-dialog v-model="dialogDelete" max-width="455px" persistent content-class="round">
                       <v-card>
                         <v-card-title class="headline"><span>Você quer realmente deletar?</span></v-card-title>
 
