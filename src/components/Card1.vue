@@ -1,21 +1,13 @@
 <template>
-    <div class="d-flex justify-center">
-        <v-card class="justify-center my-7" shaped width="50%" style="border: 1px solid #1d87b5" min-height="130"
-            rounded="lg">
-            <v-card-text class="d-flex justify-space-between">
-                <div>
-                    Último Livro alugado:
-                    <h1 class="my-1">{{ this.ultimoLivroAluguel }}</h1>
-                </div>
-
-                <div class="">
-                    <v-avatar class="mx-2 my-3" color="blue" size="3.500em" right>
-                        <v-icon size="30px" color="white"> mdi-book </v-icon>
-                    </v-avatar>
-                </div>
-            </v-card-text>
-        </v-card>
-    </div>
+    <v-card class="justify-center my-6" shaped width="85%" style="border:2px solid #147DD9" min-height="130"
+        rounded="lg">
+        <v-card-title>
+            Último livro alugado:
+        </v-card-title>
+        <v-card-text>
+            <span>{{ this.ultimoLivroAluguel }}</span>
+        </v-card-text>
+    </v-card>
 </template>
 <script>
 import RentalDataService from '../services/RentalDataService';
