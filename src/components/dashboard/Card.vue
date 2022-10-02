@@ -1,16 +1,21 @@
 <template>
-    <v-card class="justify-center my-6" shaped width="85%" style="border:2px solid #147DD9" min-height="130"
-        rounded="lg">
-        <v-card-title>
-            Último livro alugado:
-        </v-card-title>
-        <v-card-text>
-            <span>{{ this.ultimoLivroAluguel }}</span>
-        </v-card-text>
-    </v-card>
+    <v-container class="mt-5">
+        <v-card color="blue darken-1" elevation="13" rounded="xl">
+            <v-card-title class="headline white--text">Livro alugado recentemente</v-card-title>
+            <div class="white">
+                <v-col>
+                    <v-card-text>
+                        <li>
+                            <span>{{ this.ultimoLivroAluguel }}</span>
+                        </li>
+                    </v-card-text>
+                </v-col>
+            </div>
+        </v-card>
+    </v-container>
 </template>
 <script>
-import RentalDataService from '../services/RentalDataService';
+import RentalDataService from '@/services/RentalDataService';
 
 export default {
     data: () => ({

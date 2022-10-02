@@ -5,7 +5,9 @@
         <v-row>
           <v-col>
             <v-sheet rounded="xl" elevation="15">
-              <v-data-table :headers="headers" :items="books" :search="search" class="rounded-xl pa-3">
+              <v-data-table :headers="headers" :items="books" :search="search" loading="items"
+                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
+                :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
 
                 <template v-slot:top>
                   <v-toolbar flat class="rounded-xl rounded-b-0">
@@ -45,7 +47,8 @@
                                 append-icon="mdi-bookshelf"></v-select>
 
                               <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
-                                :return-value.sync="editedItem.launch" transition="scale-transition" offset-y min-width="auto">
+                                :return-value.sync="editedItem.launch" transition="scale-transition" offset-y
+                                min-width="auto">
 
                                 <template v-slot:activator="{ on, attrs }">
                                   <v-text-field v-model="editedItem.launch" label="Data de lançamento" color="blue"

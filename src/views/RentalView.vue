@@ -5,11 +5,13 @@
         <v-row>
           <v-col>
             <v-sheet rounded="xl" elevation="15">
-              <v-data-table :headers="headers" :items="rentals" :search="search" class="rounded-xl pa-3">
+              <v-data-table :headers="headers" :items="rentals" :search="search" loading="items"
+                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
+                :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
 
                 <template v-slot:top>
                   <v-toolbar flat class="rounded-xl rounded-b-0">
-                    <v-toolbar-title class="headline"><span>Alugueis</span></v-toolbar-title>
+                    <v-toolbar-title class="headline"><span>Aluguéis</span></v-toolbar-title>
 
                     <v-divider class="mx-4" inset vertical></v-divider>
 
@@ -118,7 +120,10 @@
                     <v-dialog v-model="dialog2" max-width="370px" persistent content-class="round">
                       <v-card>
 
-                        <v-card-title class="headline"> <v-spacer></v-spacer> <span class="mt-2 mb-4">Devolver o livro</span> <v-spacer></v-spacer> </v-card-title>
+                        <v-card-title class="headline">
+                          <v-spacer></v-spacer> <span class="mt-2 mb-4">Devolver o livro</span>
+                          <v-spacer></v-spacer>
+                        </v-card-title>
 
                         <v-card-actions>
 
@@ -158,13 +163,9 @@
                   <span v-else>Sem data</span>
                 </template>
 
-                <template v-slot:[`item.status`]="{ item }">
+                <template v-slot:[`item.status_Rental`]="{ item }">
                   <v-chip class="elevation-3" :color="getColor(item)" dark>
-                    <span v-if="item.return_Date <= item.forecast_Date && item.return_Date >= item.rental_Date">
-                      No prazo
-                    </span>
-                    <span v-else-if="item.return_Date > item.forecast_Date">Com atraso</span>
-                    <span v-else>Com pendência</span>
+                    {{ item.status_Rental }}
                   </v-chip>
                 </template>
 
@@ -224,7 +225,7 @@ export default {
       { text: 'Data do aluguel', value: 'rental_Date' },
       { text: 'Previsão de devolução', value: 'forecast_Date' },
       { text: 'Data de devolução', value: 'return_Date' },
-      { text: 'Status', align: 'center', value: 'status', sortable: false },
+      { text: 'Status', align: 'center', value: 'status_Rental', sortable: false },
       { text: 'Ações', align: 'center', value: 'actions', sortable: false },
     ],
     rentals: [],
@@ -238,6 +239,7 @@ export default {
       forecast_Date: '',
       return_Date: '',
       returned_Book: '',
+      status_Rental: '',
     },
     editedItem2: {
       return_Date: '',
@@ -250,6 +252,7 @@ export default {
       forecast_Date: '',
       return_Date: '',
       returned_Book: '',
+      status_Rental: '',
     },
     rules: {
       required: value => !!value || 'Campo obrigatorio.',
@@ -359,7 +362,7 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        this.editedItem2.return_Date = this.date
+        this.editedItem2.return_Date = this.nowDate
         this.editedItem2.returned_Book = true
         this.RentalUpdate()
       } else {
@@ -376,7 +379,7 @@ export default {
     },
 
     async RentalPost() {
-      await RentalDataService.create(this.editedItem1).then(() => this.listRentals()).then(() => this.showAlertSuccessPost()).then(() => this.close())
+      await RentalDataService.create(this.editedItem1).then(() => this.listRentals()).then(() => this.showAlertSuccessPost()).then(() => this.close()).then(() => this.$refs.form.resetValidation())
         .catch((e) => {
           this.showAlertErrorPost1()
           console.log(e)
@@ -387,6 +390,7 @@ export default {
       await RentalDataService.update(this.editedIndex, this.editedItem2).then(() => this.listRentals()).then(() => this.showAlertSuccessDevolution()).then(() => this.close())
         .catch((e) => {
           this.showAlertErrorUpdate1()
+          this.close()
           console.log(e)
         });
     },

@@ -5,7 +5,9 @@
         <v-row>
           <v-col>
             <v-sheet rounded="xl" elevation="15">
-              <v-data-table :headers="headers" :items="users" :search="search" class="rounded-xl pa-3">
+              <v-data-table :headers="headers" :items="users" :search="search" loading="items"
+                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
+                :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
 
                 <template v-slot:top>
                   <v-toolbar flat class="rounded-xl rounded-b-0">
@@ -217,6 +219,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
+      this.$refs.form.resetValidation();
     },
 
     closeDelete() {
