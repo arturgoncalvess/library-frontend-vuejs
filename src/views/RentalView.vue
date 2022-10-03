@@ -97,10 +97,11 @@
                             <v-btn color="red darken-1" class="mb-2" text @click="close">
                               Cancelar
                             </v-btn>
-                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save">
+                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="savePost">
                               Salvar
                             </v-btn>
                           </v-card-actions>
+
                         </v-form>
                       </v-card>
                     </v-dialog>
@@ -129,10 +130,10 @@
 
                           <v-spacer></v-spacer>
 
-                          <v-btn color="red darken-1" class="mb-2" text @click="close">
+                          <v-btn color="red darken-1" class="mb-2" text @click="closeDevolution">
                             Cancelar
                           </v-btn>
-                          <v-btn color="blue darken-1" class="mb-2" text @click="save">
+                          <v-btn color="blue darken-1" class="mb-2" text @click="saveUpdate">
                             Ok
                           </v-btn>
 
@@ -201,7 +202,7 @@
 import RentalDataService from '../services/RentalDataService'
 import UserDataService from '../services/UserDataService'
 import BookDataService from '../services/BookDataService'
-import moment, { now } from 'moment'
+import moment from 'moment'
 
 export default {
   data: () => ({
@@ -338,18 +339,23 @@ export default {
       this.rentals.splice(this.editedIndex, 1)
       this.RentalDelete()
       this.closeDelete()
-      this.close()
     },
 
     close() {
-      this.dialog = false
-      this.dialog2 = false
       this.$nextTick(() => {
         this.editedItem1 = Object.assign({}, this.defaultItem)
-        this.editedItem2 = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
       this.$refs.form.resetValidation();
+      this.dialog = false
+    },
+
+    closeDevolution() {
+      this.dialog2 = false
+      this.$nextTick(() => {
+        this.editedItem2 = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
     },
 
     closeDelete() {
@@ -361,26 +367,26 @@ export default {
       })
     },
 
-    save() {
-      if (this.editedIndex > -1) {
-        this.editedItem2.return_Date = this.nowDate
-        this.editedItem2.returned_Book = true
-        this.RentalUpdate()
-      } else {
-        if (this.$refs.form.validate()) {
-          if (this.editedItem1.forecast_Date < this.editedItem1.rental_Date) {
-            this.showAlertErrorPost2()
-          } else if (this.editedItem1.rental_Date > this.editedItem1.forecast_Date) {
-            this.showAlertErrorPost3()
-          } else {
-            this.RentalPost()
-          }
+    savePost() {
+      if (this.$refs.form.validate()) {
+        if (this.editedItem1.forecast_Date < this.editedItem1.rental_Date) {
+          this.showAlertErrorPost2()
+        } else if (this.editedItem1.rental_Date > this.editedItem1.forecast_Date) {
+          this.showAlertErrorPost3()
+        } else {
+          this.RentalPost()
         }
       }
     },
 
+    saveUpdate() {
+      this.editedItem2.return_Date = this.nowDate
+      this.editedItem2.returned_Book = true
+      this.RentalUpdate()
+    },
+
     async RentalPost() {
-      await RentalDataService.create(this.editedItem1).then(() => this.listRentals()).then(() => this.showAlertSuccessPost()).then(() => this.close()).then(() => this.$refs.form.resetValidation())
+      await RentalDataService.create(this.editedItem1).then(() => this.listRentals()).then(() => this.showAlertSuccessPost()).then(() => this.close())
         .catch((e) => {
           this.showAlertErrorPost1()
           console.log(e)
@@ -388,7 +394,7 @@ export default {
     },
 
     async RentalUpdate() {
-      await RentalDataService.update(this.editedIndex, this.editedItem2).then(() => this.listRentals()).then(() => this.showAlertSuccessDevolution()).then(() => this.close())
+      await RentalDataService.update(this.editedIndex, this.editedItem2).then(() => this.listRentals()).then(() => this.showAlertSuccessDevolution()).then(() => this.closeDevolution())
         .catch((e) => {
           this.showAlertErrorUpdate1()
           this.close()
