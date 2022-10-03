@@ -113,10 +113,6 @@
                   </v-toolbar>
                 </template>
 
-                <template v-slot:[`item.launch`]="{ item }">
-                  {{ item.launch | FormatDate }}
-                </template>
-
                 <template v-slot:[`item.quantity`]="{ item }">
                   <v-chip class="elevation-3" :color="getColor(item.quantity)" dark>
                     {{ item.quantity }}
@@ -179,6 +175,7 @@ export default {
     ],
     books: [],
     publishers: [],
+    formatDate: [],
     editedIndex: -1,
     editedItem: {
       name: '',
@@ -206,12 +203,6 @@ export default {
     valid: false,
   }),
 
-  filters: {
-    FormatDate: date => {
-      return moment(date).format('YYYY-MM-DD');
-    }
-  },
-
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? 'Novo Livro' : 'Editar Livro'
@@ -232,6 +223,11 @@ export default {
       await BookDataService.getAll()
         .then((response) => {
           this.books = response.data;
+          this.books.forEach((item) => {
+            this.formatDate = moment(item.launch).format('YYYY-MM-DD');
+
+            return (item.launch = this.formatDate)
+          })
           console.log(response.data);
         })
         .catch((e) => {

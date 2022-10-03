@@ -349,6 +349,7 @@ export default {
         this.editedItem2 = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
+      this.$refs.form.resetValidation();
     },
 
     closeDelete() {
