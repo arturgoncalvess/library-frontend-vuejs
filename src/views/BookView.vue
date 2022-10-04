@@ -82,7 +82,7 @@
                             <v-btn color="red darken-1" class="mb-2" text @click="close">
                               Cancelar
                             </v-btn>
-                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save">
+                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save" :disabled="awaitBook">
                               Salvar
                             </v-btn>
                           </v-card-actions>
@@ -160,6 +160,7 @@ export default {
     date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     nowDate: new Date().toISOString().slice(0, 10),
     search: '',
+    awaitBook: true,
     headers: [
       {
         text: 'Id',
@@ -220,6 +221,7 @@ export default {
 
   methods: {
     async listBooks() {
+      this.awaitBook = true
       await BookDataService.getAll()
         .then((response) => {
           this.books = response.data;
@@ -228,20 +230,25 @@ export default {
 
             return (item.launch = this.formatDate)
           })
+          this.awaitBook = false
           console.log(response.data);
         })
         .catch((e) => {
+          this.awaitBook = true
           console.log(e);
         });
     },
 
     async listPublisher() {
+      this.awaitBook = true
       await PublisherDataService.getAll()
         .then((response) => {
           this.publishers = response.data;
+          this.awaitBook = false
           console.log(response.data);
         })
         .catch((e) => {
+          this.awaitBook = true
           console.log(e);
         });
     },
@@ -297,17 +304,21 @@ export default {
     },
 
     async BookPost() {
-      await BookDataService.create(this.editedItem).then(() => this.listBooks()).then(() => this.showAlertSuccessPost()).then(() => this.close())
+      this.awaitBook = true
+      await BookDataService.create(this.editedItem).then(() => this.listBooks()).then(() => this.showAlertSuccessPost()).then(() => this.awaitBook = false).then(() => this.close())
         .catch((e) => {
           this.showAlertError()
+          this.awaitBook = false
           console.log(e)
         });
     },
 
     async BookUpdate() {
-      await BookDataService.update(this.editedIndex, this.editedItem).then(() => this.listBooks()).then(() => this.showAlertSuccessUpdate()).then(() => this.close())
+      this.awaitBook = true
+      await BookDataService.update(this.editedIndex, this.editedItem).then(() => this.listBooks()).then(() => this.showAlertSuccessUpdate()).then(() => this.awaitBook = false).then(() => this.close())
         .catch((e) => {
           this.showAlertError()
+          this.awaitBook = false
           console.log(e)
         });
     },

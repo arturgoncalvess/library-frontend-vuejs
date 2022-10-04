@@ -59,7 +59,7 @@
                             <v-btn color="red darken-1" class="mb-2" text @click="close">
                               Cancelar
                             </v-btn>
-                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save">
+                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save" :disabled="awaitUser">
                               Salvar
                             </v-btn>
                           </v-card-actions>
@@ -131,6 +131,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     search: '',
+    awaitUser: true,
     headers: [
       {
         text: 'Id',
@@ -190,8 +191,10 @@ export default {
         .then((response) => {
           this.users = response.data;
           console.log(response.data);
+          this.awaitUser = false
         })
         .catch((e) => {
+          this.awaitBook = true
           console.log(e);
         });
     },
@@ -241,17 +244,21 @@ export default {
     },
 
     async UserPost() {
-      await UserDataService.create(this.editedItem).then(() => this.listUsers()).then(() => this.showAlertSuccessPost()).then(() => this.close())
+      this.awaitUser = true
+      await UserDataService.create(this.editedItem).then(() => this.listUsers()).then(() => this.showAlertSuccessPost()).then(() => this.awaitUser = false).then(() => this.close())
         .catch((e) => {
           this.showAlertErrorPost()
+          this.awaitUser = false
           console.log(e)
         });
     },
 
     async UserUpdate() {
-      await UserDataService.update(this.editedIndex, this.editedItem).then(() => this.listUsers()).then(() => this.showAlertSuccessUpdate()).then(() => this.close())
+      this.awaitUser = true
+      await UserDataService.update(this.editedIndex, this.editedItem).then(() => this.listUsers()).then(() => this.showAlertSuccessUpdate()).then(() => this.awaitUser = false).then(() => this.close())
         .catch((e) => {
           this.showAlertErrorUpdate()
+          this.awaitUser = false
           console.log(e)
         });
     },

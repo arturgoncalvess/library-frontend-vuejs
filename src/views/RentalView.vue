@@ -97,7 +97,7 @@
                             <v-btn color="red darken-1" class="mb-2" text @click="close">
                               Cancelar
                             </v-btn>
-                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="savePost">
+                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="savePost" :disabled="awaitRental">
                               Salvar
                             </v-btn>
                           </v-card-actions>
@@ -133,7 +133,7 @@
                           <v-btn color="red darken-1" class="mb-2" text @click="close">
                             Cancelar
                           </v-btn>
-                          <v-btn color="blue darken-1" class="mb-2" text @click="saveUpdate">
+                          <v-btn color="blue darken-1" class="mb-2" text @click="saveUpdate" :disabled="awaitRental">
                             Ok
                           </v-btn>
 
@@ -215,6 +215,7 @@ export default {
     date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     nowDate: new Date().toISOString().slice(0, 10),
     search: '',
+    awaitRental: true,
     headers: [
       {
         text: 'Id',
@@ -276,34 +277,43 @@ export default {
 
   methods: {
     async listRentals() {
+      this.awaitRental = true
       await RentalDataService.getAll()
         .then((response) => {
           this.rentals = response.data;
+          this.awaitRental = false
           console.log(response.data);
         })
         .catch((e) => {
+          this.awaitRental = true
           console.log(e);
         });
     },
 
     async listUsers() {
+      this.awaitRental = true
       await UserDataService.getAll()
         .then((response) => {
           this.users = response.data;
+          this.awaitRental = false
           console.log(response.data);
         })
         .catch((e) => {
+          this.awaitRental = true
           console.log(e);
         });
     },
 
     async listBooks() {
+      this.awaitRental = true
       await BookDataService.getAll()
         .then((response) => {
           this.books = response.data;
+          this.awaitRental = false
           console.log(response.data);
         })
         .catch((e) => {
+          this.awaitRental = true
           console.log(e);
         });
     },
@@ -381,19 +391,22 @@ export default {
     },
 
     async RentalPost() {
+      this.awaitRental = true
       await RentalDataService.create(this.editedItem).then(() => this.listRentals()).then(() => this.showAlertSuccessPost()).then(() => this.close(true))
         .catch((e) => {
           this.showAlertErrorPost1()
+          this.awaitRental = false
           console.log(e)
         });
     },
 
     async RentalUpdate() {
-      await RentalDataService.update(this.editedIndex, this.devolutionItem).then(() => this.listRentals()).then(() => this.showAlertSuccessDevolution()).then(() => this.close(false))
+      this.awaitRental = true
+      await RentalDataService.update(this.editedIndex, this.devolutionItem).then(() => this.listRentals()).then(() => this.showAlertSuccessDevolution()).then(() => this.awaitRental = false).then(() => this.close(false))
         .catch((e) => {
           this.close()
-          console.log(e)
           this.showAlertErrorUpdate1()
+          console.log(e)
         });
     },
 

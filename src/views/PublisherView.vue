@@ -51,7 +51,7 @@
                             <v-btn color="red darken-1" class="mb-2" text @click="close">
                               Cancelar
                             </v-btn>
-                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save">
+                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save" :disabled="awaitPublisher">
                               Salvar
                             </v-btn>
                           </v-card-actions>
@@ -118,6 +118,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     search: '',
+    awaitPublisher: true,
     headers: [
       {
         text: 'Id',
@@ -164,12 +165,15 @@ export default {
 
   methods: {
     async listPublishers() {
+      this.awaitPublisher = true
       await PublisherDataService.getAll()
         .then((response) => {
           this.publishers = response.data;
+          this.awaitPublisher = false
           console.log(response.data);
         })
         .catch((e) => {
+          this.awaitPublisher = true
           console.log(e);
         });
     },
@@ -219,17 +223,21 @@ export default {
     },
 
     async PublisherPost() {
-      await PublisherDataService.create(this.editedItem).then(() => this.listPublishers()).then(() => this.showAlertSuccessPost()).then(() => this.close())
+      this.awaitPublisher = true
+      await PublisherDataService.create(this.editedItem).then(() => this.listPublishers()).then(() => this.showAlertSuccessPost()).then(() => this.awaitPublisher = false).then(() => this.close())
         .catch((e) => {
           this.showAlertErrorPost()
+          this.awaitPublisher = false
           console.log(e)
         });
     },
 
     async PublisherUpdate() {
-      await PublisherDataService.update(this.editedIndex, this.editedItem).then(() => this.listPublishers()).then(() => this.showAlertSuccessUpdate()).then(() => this.close())
+      this.awaitPublisher = true
+      await PublisherDataService.update(this.editedIndex, this.editedItem).then(() => this.listPublishers()).then(() => this.showAlertSuccessUpdate()).then(() => this.awaitPublisher = false).then(() => this.close())
         .catch((e) => {
           this.showAlertErrorUpdate()
+          this.awaitPublisher = false
           console.log(e)
         });
     },
