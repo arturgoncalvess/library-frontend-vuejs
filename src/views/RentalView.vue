@@ -34,11 +34,11 @@
 
                           <v-card-text>
                             <v-container>
-                              <v-select v-model="editedItem1.userId" :items="users" item-text="name" item-value="id"
+                              <v-select v-model="editedItem.userId" :items="users" item-text="name" item-value="id"
                                 label="Usuário" color="blue" :rules="[rules.required]" append-icon="mdi-account">
                               </v-select>
 
-                              <v-select v-model="editedItem1.bookId" :items="books" item-text="name" item-value="id"
+                              <v-select v-model="editedItem.bookId" :items="books" item-text="name" item-value="id"
                                 label="Livro" color="blue" :rules="[rules.required]" append-icon="mdi-book-account">
                               </v-select>
 
@@ -46,19 +46,19 @@
                                 :return-value.sync="date" transition="scale-transition" offset-y min-width="auto">
 
                                 <template v-slot:activator="{ on, attrs }">
-                                  <v-text-field v-model="editedItem1.rental_Date" label="Data de aluguel" color="blue"
+                                  <v-text-field v-model="editedItem.rental_Date" label="Data de aluguel" color="blue"
                                     :rules="[rules.required]" append-icon="mdi-calendar-today-outline" readonly
                                     v-bind="attrs" v-on="on">
                                   </v-text-field>
                                 </template>
 
-                                <v-date-picker v-model="editedItem1.rental_Date" no-title scrollable color="blue"
+                                <v-date-picker v-model="editedItem.rental_Date" no-title scrollable color="blue"
                                   :max="nowDate">
 
                                   <v-spacer></v-spacer>
 
                                   <v-btn text @click="menu1 = false"> Cancelar </v-btn>
-                                  <v-btn text color="blue" @click="$refs.menu1.save(editedItem1.rental_Date)">
+                                  <v-btn text color="blue" @click="$refs.menu1.save(editedItem.rental_Date)">
                                     OK
                                   </v-btn>
                                 </v-date-picker>
@@ -69,19 +69,19 @@
                                 :return-value.sync="date" transition="scale-transition" offset-y min-width="auto">
 
                                 <template v-slot:activator="{ on, attrs }">
-                                  <v-text-field v-model="editedItem1.forecast_Date" label="Previsão de devolução"
+                                  <v-text-field v-model="editedItem.forecast_Date" label="Previsão de devolução"
                                     color="blue" :rules="[rules.required]" append-icon="mdi-calendar-outline" readonly
                                     v-bind="attrs" v-on="on">
                                   </v-text-field>
                                 </template>
 
-                                <v-date-picker v-model="editedItem1.forecast_Date" no-title scrollable color="blue"
+                                <v-date-picker v-model="editedItem.forecast_Date" no-title scrollable color="blue"
                                   :min="nowDate">
 
                                   <v-spacer></v-spacer>
 
                                   <v-btn text @click="menu2 = false"> Cancelar </v-btn>
-                                  <v-btn text color="blue" @click="$refs.menu2.save(editedItem1.forecast_Date)">
+                                  <v-btn text color="blue" @click="$refs.menu2.save(editedItem.forecast_Date)">
                                     OK
                                   </v-btn>
                                 </v-date-picker>
@@ -130,7 +130,7 @@
 
                           <v-spacer></v-spacer>
 
-                          <v-btn color="red darken-1" class="mb-2" text @click="closeDevolution">
+                          <v-btn color="red darken-1" class="mb-2" text @click="close">
                             Cancelar
                           </v-btn>
                           <v-btn color="blue darken-1" class="mb-2" text @click="saveUpdate">
@@ -233,16 +233,15 @@ export default {
     users: [],
     books: [],
     editedIndex: -1,
-    editedItem1: {
+    editedItem: {
       userId: '',
       bookId: '',
       rental_Date: '',
       forecast_Date: '',
       return_Date: '',
       returned_Book: '',
-      status_Rental: '',
     },
-    editedItem2: {
+    devolutionItem: {
       return_Date: '',
       returned_Book: '',
     },
@@ -253,14 +252,12 @@ export default {
       forecast_Date: '',
       return_Date: '',
       returned_Book: '',
-      status_Rental: '',
     },
     rules: {
       required: value => !!value || 'Campo obrigatorio.',
     },
     valid: false,
   }),
-
 
   filters: {
     FormatDate: date => {
@@ -319,19 +316,20 @@ export default {
 
     newItem(item) {
       this.editedIndex = item.id
-      this.editedItem1 = Object.assign({}, item)
+      this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
 
     editItem(item) {
       this.editedIndex = item.id
-      this.editedItem1 = Object.assign({}, item)
+      this.devolutionItem.return_Date = this.nowDate
+      this.devolutionItem.returned_Book = true
       this.dialog2 = true
     },
 
     deleteItem(item) {
       this.editedIndex = item.id
-      this.editedItem1 = Object.assign({}, item)
+      this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
 
@@ -341,37 +339,36 @@ export default {
       this.closeDelete()
     },
 
-    close() {
-      this.$nextTick(() => {
-        this.editedItem1 = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-      this.$refs.form.resetValidation();
-      this.dialog = false
-    },
-
-    closeDevolution() {
-      this.dialog2 = false
-      this.$nextTick(() => {
-        this.editedItem2 = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
+    close(a) {
+      if(a) {
+        this.$nextTick(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        })
+        this.$refs.form.resetValidation()
+        this.dialog = false
+      } else {
+        this.$nextTick(() => {
+          this.devolutionItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        })
+        this.dialog2 = false
+      }
     },
 
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedItem1 = Object.assign({}, this.defaultItem)
-        this.editedItem2 = Object.assign({}, this.defaultItem)
+        this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
       })
     },
 
     savePost() {
       if (this.$refs.form.validate()) {
-        if (this.editedItem1.forecast_Date < this.editedItem1.rental_Date) {
+        if (this.editedItem.forecast_Date < this.editedItem.rental_Date) {
           this.showAlertErrorPost2()
-        } else if (this.editedItem1.rental_Date > this.editedItem1.forecast_Date) {
+        } else if (this.editedItem.rental_Date > this.editedItem.forecast_Date) {
           this.showAlertErrorPost3()
         } else {
           this.RentalPost()
@@ -380,13 +377,11 @@ export default {
     },
 
     saveUpdate() {
-      this.editedItem2.return_Date = this.nowDate
-      this.editedItem2.returned_Book = true
       this.RentalUpdate()
     },
 
     async RentalPost() {
-      await RentalDataService.create(this.editedItem1).then(() => this.listRentals()).then(() => this.showAlertSuccessPost()).then(() => this.close())
+      await RentalDataService.create(this.editedItem).then(() => this.listRentals()).then(() => this.showAlertSuccessPost()).then(() => this.close(true))
         .catch((e) => {
           this.showAlertErrorPost1()
           console.log(e)
@@ -394,11 +389,11 @@ export default {
     },
 
     async RentalUpdate() {
-      await RentalDataService.update(this.editedIndex, this.editedItem2).then(() => this.listRentals()).then(() => this.showAlertSuccessDevolution()).then(() => this.closeDevolution())
+      await RentalDataService.update(this.editedIndex, this.devolutionItem).then(() => this.listRentals()).then(() => this.showAlertSuccessDevolution()).then(() => this.close(false))
         .catch((e) => {
-          this.showAlertErrorUpdate1()
           this.close()
           console.log(e)
+          this.showAlertErrorUpdate1()
         });
     },
 
