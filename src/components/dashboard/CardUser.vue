@@ -20,7 +20,7 @@
                         </v-list-item>
                     </v-col>
                     <v-col cols="12" sm="4">
-                        <v-avatar size="125" class="ml-n12 mt-3" tile>
+                        <v-avatar size="115" class="img__avatar ml-n14 mt-4" tile>
                             <v-img src="@/assets/img/account-outline.png"></v-img>
                         </v-avatar>
                     </v-col>
@@ -51,5 +51,9 @@ export default {
 }
 </script>
 <style scoped>
-
+    @media (max-width: 700px) {
+        .img__avatar{
+            display: none;
+        }
+    }
 </style>

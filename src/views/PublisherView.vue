@@ -85,7 +85,7 @@
                 <template v-slot:[`item.actions`]="{ item }">
                   <v-tooltip top color="blue">
                     <template v-slot:activator="{ on, attrs }">
-                      <v-icon color="blue" size="23px" class="mr-2" v-bind="attrs" v-on="on" @click="editItem(item)">
+                      <v-icon color="blue" size="23px" class="mr-1" v-bind="attrs" v-on="on" @click="editItem(item)">
                         mdi-lead-pencil
                       </v-icon>
                     </template>

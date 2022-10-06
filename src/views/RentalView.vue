@@ -52,7 +52,7 @@
                                   </v-text-field>
                                 </template>
 
-                                <v-date-picker v-model="editedItem.rental_Date" no-title scrollable color="blue"
+                                <v-date-picker v-model="editedItem.rental_Date" locale="pt-br" no-title scrollable color="blue"
                                   :max="nowDate">
 
                                   <v-spacer></v-spacer>
@@ -75,7 +75,7 @@
                                   </v-text-field>
                                 </template>
 
-                                <v-date-picker v-model="editedItem.forecast_Date" no-title scrollable color="blue"
+                                <v-date-picker v-model="editedItem.forecast_Date" locale="pt-br" no-title scrollable color="blue"
                                   :min="nowDate">
 
                                   <v-spacer></v-spacer>
@@ -263,7 +263,7 @@ export default {
 
   filters: {
     FormatDate: date => {
-      return moment(date).format('YYYY-MM-DD');
+      return moment(date).format('DD/MM/YYYY');
     }
   },
 

@@ -20,7 +20,7 @@
                         </v-list-item>
                     </v-col>
                     <v-col cols="12" sm="4">
-                        <v-avatar size="125" class="ml-n13 mt-2" tile>
+                        <v-avatar size="110" class="ml-n16 mt-5" tile>
                             <v-img src="@/assets/img/rent-outline.png"></v-img>
                         </v-avatar>
                     </v-col>

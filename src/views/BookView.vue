@@ -57,7 +57,7 @@
                                   </v-text-field>
                                 </template>
 
-                                <v-date-picker v-model="editedItem.launch" no-title scrollable color="blue"
+                                <v-date-picker v-model="editedItem.launch" locale="pt-br" no-title scrollable color="blue"
                                   :max="nowDate">
 
                                   <v-spacer></v-spacer>
@@ -113,6 +113,10 @@
                   </v-toolbar>
                 </template>
 
+                <template v-slot:[`item.launch`]="{ item }">
+                  {{ item.launch | FormatDate }}
+                </template>
+
                 <template v-slot:[`item.quantity`]="{ item }">
                   <v-chip class="elevation-3" :color="getColor(item.quantity)" dark>
                     {{ item.quantity }}
@@ -122,7 +126,7 @@
                 <template v-slot:[`item.actions`]="{ item }">
                   <v-tooltip top color="blue">
                     <template v-slot:activator="{ on, attrs }">
-                      <v-icon color="blue" size="23px" class="mr-2" v-bind="attrs" v-on="on" @click="editItem(item)">
+                      <v-icon color="blue" size="23px" class="mr-1" v-bind="attrs" v-on="on" @click="editItem(item)">
                         mdi-lead-pencil
                       </v-icon>
                     </template>
@@ -208,6 +212,12 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? 'Novo Livro' : 'Editar Livro'
     },
+  },
+
+  filters: {
+    FormatDate: date => {
+      return moment(date).format('DD/MM/YYYY');
+    }
   },
 
   watch: {

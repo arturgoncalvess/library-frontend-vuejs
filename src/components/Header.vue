@@ -7,16 +7,16 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn class="mr-3" active-class="blue white--text elevation-5" text to="/">
+            <v-btn class="mr-2" active-class="blue white--text elevation-5" text to="/">
                 <v-icon size="24px"> mdi-home </v-icon> Home
             </v-btn>
-            <v-btn class="mr-3" active-class="blue white--text elevation-5" text to="/user">
+            <v-btn class="mr-2" active-class="blue white--text elevation-5" text to="/user">
                 <v-icon size="24px"> mdi-account </v-icon> Usuário
             </v-btn>
-            <v-btn class="mr-3" active-class="blue white--text elevation-5" text to="/book">
+            <v-btn class="mr-2" active-class="blue white--text elevation-5" text to="/book">
                 <v-icon size="21px"> mdi-book </v-icon> Livro
             </v-btn>
-            <v-btn class="mr-3" active-class="blue white--text elevation-5" text to="/publisher">
+            <v-btn class="mr-2" active-class="blue white--text elevation-5" text to="/publisher">
                 <v-icon size="24px"> mdi-bookshelf </v-icon> Editora
             </v-btn>
             <v-btn active-class="blue white--text elevation-5" text to="/rental">
