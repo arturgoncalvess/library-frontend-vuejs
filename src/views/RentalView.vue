@@ -97,7 +97,8 @@
                             <v-btn color="red darken-1" class="mb-2" text @click="close">
                               Cancelar
                             </v-btn>
-                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="savePost" :disabled="awaitRental">
+                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="savePost"
+                              :disabled="awaitRental">
                               Salvar
                             </v-btn>
                           </v-card-actions>
@@ -306,7 +307,7 @@ export default {
 
     async listBooks() {
       this.awaitRental = true
-      await BookDataService.getAll()
+      await BookDataService.getAvailable()
         .then((response) => {
           this.books = response.data;
           this.awaitRental = false
@@ -338,19 +339,17 @@ export default {
     },
 
     deleteItem(item) {
-      this.editedIndex = item.id
-      this.editedItem = Object.assign({}, item)
+      this.deletedIndex = item.id
       this.dialogDelete = true
     },
 
     deleteItemConfirm() {
-      this.rentals.splice(this.editedIndex, 1)
       this.RentalDelete()
       this.closeDelete()
     },
 
     close(a) {
-      if(a) {
+      if (a) {
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
@@ -369,8 +368,7 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
+        this.deletedIndex = -1
       })
     },
 
@@ -392,7 +390,7 @@ export default {
 
     async RentalPost() {
       this.awaitRental = true
-      await RentalDataService.create(this.editedItem).then(() => this.listRentals()).then(() => this.showAlertSuccessPost()).then(() => this.close(true))
+      await RentalDataService.create(this.editedItem).then(() => this.listRentals()).then(() => this.listBooks()).then(() => this.showAlertSuccessPost()).then(() => this.close(true))
         .catch((e) => {
           this.showAlertErrorPost1()
           this.awaitRental = false
@@ -402,7 +400,7 @@ export default {
 
     async RentalUpdate() {
       this.awaitRental = true
-      await RentalDataService.update(this.editedIndex, this.devolutionItem).then(() => this.listRentals()).then(() => this.showAlertSuccessDevolution()).then(() => this.awaitRental = false).then(() => this.close(false))
+      await RentalDataService.update(this.editedIndex, this.devolutionItem).then(() => this.listRentals()).then(() => this.listBooks()).then(() => this.showAlertSuccessDevolution()).then(() => this.awaitRental = false).then(() => this.close(false))
         .catch((e) => {
           this.close()
           this.showAlertErrorUpdate1()
@@ -411,7 +409,7 @@ export default {
     },
 
     async RentalDelete() {
-      await RentalDataService.delete(this.editedIndex).then(() => this.listRentals()).then(() => this.showAlertSuccessDelete())
+      await RentalDataService.delete(this.deletedIndex).then(() => this.listRentals()).then(() => this.listBooks()).then(() => this.showAlertSuccessDelete())
         .catch((e) => {
           this.showAlertErrorDelete()
           console.log(e)

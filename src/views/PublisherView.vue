@@ -185,8 +185,7 @@ export default {
     },
 
     deleteItem(item) {
-      this.editedIndex = item.id
-      this.editedItem = Object.assign({}, item)
+      this.deletedIndex = item.id
       this.dialogDelete = true
     },
 
@@ -207,8 +206,7 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
+        this.deletedIndex = -1
       })
     },
 
@@ -243,7 +241,7 @@ export default {
     },
 
     async PublisherDelete() {
-      await PublisherDataService.delete(this.editedIndex).then(() => this.listPublishers()).then(() => this.showAlertSuccessDelete()).then(() => this.close())
+      await PublisherDataService.delete(this.deletedIndex).then(() => this.listPublishers()).then(() => this.showAlertSuccessDelete())
         .catch((e) => {
           this.showAlertErrorDelete()
           console.log(e)

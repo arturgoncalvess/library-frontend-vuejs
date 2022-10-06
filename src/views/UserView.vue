@@ -206,8 +206,7 @@ export default {
     },
 
     deleteItem(item) {
-      this.editedIndex = item.id
-      this.editedItem = Object.assign({}, item)
+      this.deletedIndex = item.id
       this.dialogDelete = true
     },
 
@@ -228,9 +227,8 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
+        this.deletedIndex = -1
+      }) 
     },
 
     save() {
@@ -264,7 +262,7 @@ export default {
     },
 
     async UserDelete() {
-      await UserDataService.delete(this.editedIndex).then(() => this.listUsers()).then(() => this.showAlertSuccessDelete()).then(() => this.close())
+      await UserDataService.delete(this.deletedIndex).then(() => this.listUsers()).then(() => this.showAlertSuccessDelete())
         .catch((e) => {
           this.showAlertErrorDelete()
           console.log(e)

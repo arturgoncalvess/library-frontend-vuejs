@@ -6,7 +6,8 @@
                 <v-col>
                     <v-card-text>
                         <li>
-                            <span>{{ this.ultimoLivroAluguel }}</span>
+                            <span v-if="this.ultimoLivroAluguel.length > 0">{{ this.ultimoLivroAluguel }}</span>
+                            <span v-else>---</span>
                         </li>
                     </v-card-text>
                 </v-col>

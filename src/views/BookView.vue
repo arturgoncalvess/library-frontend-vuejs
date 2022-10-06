@@ -70,7 +70,7 @@
                               </v-menu>
 
                               <v-text-field v-model="editedItem.quantity" label="Quantidade" color="blue" type="number"
-                                :rules="[rules.required, rules.min_number]" append-icon="mdi-numeric">
+                                :rules="[rules.min_number]" append-icon="mdi-numeric">
                               </v-text-field>
                             </v-container>
                           </v-card-text>
@@ -184,7 +184,7 @@ export default {
       publisherId: '',
       publisher: '',
       launch: '',
-      quantity: '',
+      quantity: 0,
     },
     defaultItem: {
       name: '',
@@ -192,13 +192,13 @@ export default {
       publisherId: '',
       publisher: '',
       launch: '',
-      quantity: '',
+      quantity: 0,
     },
     rules: {
       required: value => !!value || 'Campo obrigatorio.',
       counter_book: value => value.length <= 120 || 'Max 120 caracteres.',
       counter_author: value => value.length <= 35 || 'Max 35 caracteres.',
-      min_number: value => value > 0 || 'Min 1 quantity.',
+      min_number: value => value >= 0 ||  'Quantity invalid.',
       min_counter: value => value.length >= 3 || 'Min 3 caracteres.',
     },
     valid: false,
@@ -266,8 +266,7 @@ export default {
     },
 
     deleteItem(item) {
-      this.editedIndex = item.id
-      this.editedItem = Object.assign({}, item)
+      this.deletedIndex = item.id
       this.dialogDelete = true
     },
 
@@ -288,8 +287,7 @@ export default {
     closeDelete() {
       this.dialogDelete = false
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
+        this.deletedIndex = -1
       })
     },
 
@@ -307,7 +305,7 @@ export default {
       this.awaitBook = true
       await BookDataService.create(this.editedItem).then(() => this.listBooks()).then(() => this.showAlertSuccessPost()).then(() => this.awaitBook = false).then(() => this.close())
         .catch((e) => {
-          this.showAlertError()
+          this.showAlertError1()
           this.awaitBook = false
           console.log(e)
         });
@@ -317,14 +315,14 @@ export default {
       this.awaitBook = true
       await BookDataService.update(this.editedIndex, this.editedItem).then(() => this.listBooks()).then(() => this.showAlertSuccessUpdate()).then(() => this.awaitBook = false).then(() => this.close())
         .catch((e) => {
-          this.showAlertError()
+          this.showAlertError1()
           this.awaitBook = false
           console.log(e)
         });
     },
 
     async BookDelete() {
-      await BookDataService.delete(this.editedIndex).then(() => this.listBooks()).then(() => this.showAlertSuccessDelete())
+      await BookDataService.delete(this.deletedIndex).then(() => this.listBooks()).then(() => this.showAlertSuccessDelete())
         .catch((e) => {
           this.showAlertError2()
           console.log(e)
