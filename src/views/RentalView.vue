@@ -320,9 +320,9 @@ export default {
     },
 
     getColor(item) {
-      if (item.return_Date <= item.forecast_Date && item.return_Date >= item.rental_Date) return 'green'
-      else if (item.return_Date > item.forecast_Date) return 'red'
-      else return 'gray'
+      if (item.status_Rental === 'No prazo') return 'green'
+      else if (item.status_Rental === 'Com atraso') return 'red'
+      else if (item.status_Rental === 'Com pendência') return 'gray'
     },
 
     newItem(item) {
