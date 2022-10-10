@@ -113,10 +113,6 @@
                   </v-toolbar>
                 </template>
 
-                <template v-slot:[`item.launch`]="{ item }">
-                  {{ item.launch | FormatDate }}
-                </template>
-
                 <template v-slot:[`item.quantity`]="{ item }">
                   <v-chip class="elevation-3" :color="getColor(item.quantity)" dark>
                     {{ item.quantity }}
@@ -180,7 +176,6 @@ export default {
     ],
     books: [],
     publishers: [],
-    formatDate: [],
     editedIndex: -1,
     editedItem: {
       name: '',
@@ -214,12 +209,6 @@ export default {
     },
   },
 
-  filters: {
-    FormatDate: date => {
-      return moment(date).format('DD/MM/YYYY');
-    }
-  },
-
   watch: {
     dialog(val) {
       val || this.close()
@@ -236,9 +225,7 @@ export default {
         .then((response) => {
           this.books = response.data;
           this.books.forEach((item) => {
-            this.formatDate = moment(item.launch).format('YYYY-MM-DD');
-
-            return (item.launch = this.formatDate)
+            item.launch = this.listDate(item.launch)
           })
           this.awaitBook = false
           console.log(response.data);
@@ -263,6 +250,15 @@ export default {
         });
     },
 
+    listDate(date) {
+      return moment(date).format('DD/MM/YYYY');
+    },
+
+    editDate(date) {
+      const [dd, mm, yyyy] = date.split('/');
+      return `${yyyy}-${mm}-${dd}`    
+    },
+
     getColor(quantity) {
       if (quantity < 10) return 'red'
       else if (quantity < 50) return 'orange'
@@ -272,6 +268,7 @@ export default {
     editItem(item) {
       this.editedIndex = item.id
       this.editedItem = Object.assign({}, item)
+      this.editedItem.launch = this.editDate(this.editedItem.launch)
       this.dialog = true
     },
 

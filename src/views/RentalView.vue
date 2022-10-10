@@ -152,16 +152,8 @@
                   </v-toolbar>
                 </template>
 
-                <template v-slot:[`item.rental_Date`]="{ item }">
-                  {{ item.rental_Date | FormatDate }}
-                </template>
-
-                <template v-slot:[`item.forecast_Date`]="{ item }">
-                  {{ item.forecast_Date | FormatDate }}
-                </template>
-
                 <template v-slot:[`item.return_Date`]="{ item }">
-                  <span v-if="item.returned_Book">{{ item.return_Date | FormatDate }}</span>
+                  <span v-if="item.returned_Book">{{ item.return_Date }}</span>
                   <span v-else>Sem data</span>
                 </template>
 
@@ -261,12 +253,6 @@ export default {
     valid: false,
   }),
 
-  filters: {
-    FormatDate: date => {
-      return moment(date).format('DD/MM/YYYY');
-    }
-  },
-
   watch: {
     dialog(val) {
       val || this.close()
@@ -282,6 +268,11 @@ export default {
       await RentalDataService.getAll()
         .then((response) => {
           this.rentals = response.data;
+          this.rentals.forEach((item) => {
+            item.rental_Date = this.listDate(item.rental_Date)
+            item.forecast_Date = this.listDate(item.forecast_Date)
+            item.return_Date = this.listDate(item.return_Date)
+          })
           this.awaitRental = false
           console.log(response.data);
         })
@@ -319,6 +310,15 @@ export default {
         });
     },
 
+    listDate(date) {
+      return moment(date).format('DD/MM/YYYY');
+    },
+
+    editDate(date) {
+      const [dd, mm, yyyy] = date.split('/');
+      return `${yyyy}-${mm}-${dd}`    
+    },
+
     getColor(item) {
       if (item.return_Date <= item.forecast_Date && item.return_Date >= item.rental_Date) return 'green'
       else if (item.return_Date > item.forecast_Date) return 'red'
@@ -328,6 +328,8 @@ export default {
     newItem(item) {
       this.editedIndex = item.id
       this.editedItem = Object.assign({}, item)
+      this.editedItem.rental_Date = this.editDate(this.editedItem.rental_Date)
+      this.editedItem.forecast_Date = this.editDate(this.editedItem.forecast_Date)
       this.dialog = true
     },
 
