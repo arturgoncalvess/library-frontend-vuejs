@@ -4,7 +4,7 @@
       <v-container>
         <v-row>
           <v-col>
-            <v-sheet rounded="xl" elevation="15">
+            <v-sheet class="mb-15" rounded="xl" elevation="15">
               <v-data-table :headers="headers" :items="rentals" :search="search" loading="items"
                 loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
                 :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
@@ -18,7 +18,7 @@
                     <v-dialog v-model="dialog" max-width="500px" persistent content-class="round">
 
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn class="elevation-5" color="blue" dark v-bind="attrs" v-on="on">
+                        <v-btn class="elevation-5" @click="formInitialize" color="blue" dark v-bind="attrs" v-on="on">
                           Novo
                           <v-icon class="ml-1">mdi-plus</v-icon>
                         </v-btn>
@@ -52,8 +52,8 @@
                                   </v-text-field>
                                 </template>
 
-                                <v-date-picker v-model="editedItem.rental_Date" locale="pt-br" no-title scrollable color="blue"
-                                  :max="nowDate">
+                                <v-date-picker v-model="editedItem.rental_Date" locale="pt-br" no-title scrollable
+                                  color="blue" :max="nowDate">
 
                                   <v-spacer></v-spacer>
 
@@ -75,8 +75,8 @@
                                   </v-text-field>
                                 </template>
 
-                                <v-date-picker v-model="editedItem.forecast_Date" locale="pt-br" no-title scrollable color="blue"
-                                  :min="nowDate">
+                                <v-date-picker v-model="editedItem.forecast_Date" locale="pt-br" no-title scrollable
+                                  color="blue" :min="nowDate">
 
                                   <v-spacer></v-spacer>
 
@@ -150,11 +150,6 @@
                     <v-text-field v-model="search" append-icon="mdi-magnify" label="Pesquisar" color="blue" single-line
                       hide-details></v-text-field>
                   </v-toolbar>
-                </template>
-
-                <template v-slot:[`item.return_Date`]="{ item }">
-                  <span v-if="item.returned_Book">{{ item.return_Date }}</span>
-                  <span v-else>Sem data</span>
                 </template>
 
                 <template v-slot:[`item.status_Rental`]="{ item }">
@@ -272,6 +267,10 @@ export default {
             item.rental_Date = this.listDate(item.rental_Date)
             item.forecast_Date = this.listDate(item.forecast_Date)
             item.return_Date = this.listDate(item.return_Date)
+
+            if (item.returned_Book == false) {
+              item.return_Date = "Sem data"
+            }
           })
           this.awaitRental = false
           console.log(response.data);
@@ -316,7 +315,7 @@ export default {
 
     editDate(date) {
       const [dd, mm, yyyy] = date.split('/');
-      return `${yyyy}-${mm}-${dd}`    
+      return `${yyyy}-${mm}-${dd}`
     },
 
     getColor(item) {
@@ -348,6 +347,14 @@ export default {
     deleteItemConfirm() {
       this.RentalDelete()
       this.closeDelete()
+    },
+
+    formInitialize() {
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+      this.$refs.form.resetValidation()
     },
 
     close(a) {

@@ -9,6 +9,10 @@ class PublisherDataService {
     return http.get(`/Publisher/${id}`);
   }
 
+  getByName(name) {
+    return http.get(`/Publisher/?Name=${name}`);
+  }
+
   create(data) {
     return http.post("/Publisher", data);
   }

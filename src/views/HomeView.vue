@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-main class="blue">
-            <v-container>
+            <v-container class="mb-15">
                 <v-row>
                     <v-col cols="3">
                         <CardUser></CardUser>

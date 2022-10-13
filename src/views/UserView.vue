@@ -4,7 +4,7 @@
       <v-container>
         <v-row>
           <v-col>
-            <v-sheet rounded="xl" elevation="15">
+            <v-sheet class="mb-15" rounded="xl" elevation="15">
               <v-data-table :headers="headers" :items="users" :search="search" loading="items"
                 loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
                 :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
@@ -18,7 +18,7 @@
                     <v-dialog v-model="dialog" persistent max-width="500px" content-class="round">
 
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn class="elevation-5" color="blue" dark v-bind="attrs" v-on="on">
+                        <v-btn class="elevation-5" @click="formInitialize" color="blue" dark v-bind="attrs" v-on="on"> 
                           Novo
                           <v-icon class="ml-1">mdi-plus</v-icon>
                         </v-btn>
@@ -213,6 +213,14 @@ export default {
     deleteItemConfirm() {
       this.UserDelete()
       this.closeDelete()
+    },
+
+    formInitialize() {
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+      this.$refs.form.resetValidation()
     },
 
     close() {
