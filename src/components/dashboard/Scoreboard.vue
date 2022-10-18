@@ -1,7 +1,7 @@
 <template>
     <v-container class="mt-5">
         <v-card color="blue darken-1" elevation="13" rounded="xl">
-            <v-card-title class="headline white--text">Top 3 livros mais alugados</v-card-title>
+            <v-card-title class="headline white--text">Os 3 livros mais alugados</v-card-title>
             <div class="white">
                 <v-col>
                     <v-card-text v-if="this.firstBook.maxRented > 0">

@@ -6,8 +6,9 @@
           <v-col>
             <v-sheet class="mb-15" rounded="xl" elevation="15">
               <v-data-table :headers="headers" :items="rentals" :search="search" loading="items"
-                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
-                :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
+                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado." :header-props="{
+                sortByText: 'Ordenar Por'}" :footer-props="{itemsPerPageText: 'Linhas por página'}"
+                class="rounded-xl pa-3">
 
                 <template v-slot:top>
                   <v-toolbar flat class="rounded-xl rounded-b-0">
@@ -147,8 +148,8 @@
 
                     <v-spacer></v-spacer>
 
-                    <v-text-field v-model="search" append-icon="mdi-magnify" label="Pesquisar" color="blue" single-line
-                      hide-details></v-text-field>
+                    <v-text-field v-model="search" class="ml-4" append-icon="mdi-magnify" label="Pesquisar" color="blue"
+                      single-line hide-details></v-text-field>
                   </v-toolbar>
                 </template>
 

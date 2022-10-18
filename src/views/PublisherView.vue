@@ -6,8 +6,9 @@
           <v-col>
             <v-sheet class="mb-15" rounded="xl" elevation="15">
               <v-data-table :headers="headers" :items="publishers" :search="search" loading="items"
-                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
-                :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
+                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado." :header-props="{
+                sortByText: 'Ordenar Por'}" :footer-props="{itemsPerPageText: 'Linhas por página'}"
+                class="rounded-xl pa-3">
 
                 <template v-slot:top>
                   <v-toolbar flat class="rounded-xl rounded-b-0">
@@ -18,7 +19,7 @@
                     <v-dialog v-model="dialog" persistent max-width="500px" content-class="round">
 
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn class="elevation-5" @click="formInitialize" color="blue" dark v-bind="attrs" v-on="on"> 
+                        <v-btn class="elevation-5" @click="formInitialize" color="blue" dark v-bind="attrs" v-on="on">
                           Novo
                           <v-icon class="ml-1">mdi-plus</v-icon>
                         </v-btn>
@@ -51,7 +52,8 @@
                             <v-btn color="red darken-1" class="mb-2" text @click="close">
                               Cancelar
                             </v-btn>
-                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save" :disabled="awaitPublisher">
+                            <v-btn color="blue darken-1" class="mb-2 mr-2" text @click="save"
+                              :disabled="awaitPublisher">
                               Salvar
                             </v-btn>
                           </v-card-actions>
@@ -76,8 +78,8 @@
 
                     <v-spacer></v-spacer>
 
-                    <v-text-field v-model="search" append-icon="mdi-magnify" label="Pesquisar" color="blue" single-line
-                      hide-details>
+                    <v-text-field v-model="search" class="ml-4" append-icon="mdi-magnify" label="Pesquisar" color="blue"
+                      single-line hide-details>
                     </v-text-field>
                   </v-toolbar>
                 </template>

@@ -6,8 +6,8 @@
           <v-col>
             <v-sheet class="mb-15" rounded="xl" elevation="15">
               <v-data-table :headers="headers" :items="users" :search="search" loading="items"
-                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
-                :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
+                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado." :header-props="{
+                sortByText: 'Ordenar Por'}" :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
 
                 <template v-slot:top>
                   <v-toolbar flat class="rounded-xl rounded-b-0">
@@ -18,7 +18,7 @@
                     <v-dialog v-model="dialog" persistent max-width="500px" content-class="round">
 
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn class="elevation-5" @click="formInitialize" color="blue" dark v-bind="attrs" v-on="on"> 
+                        <v-btn class="elevation-5" @click="formInitialize" color="blue" dark v-bind="attrs" v-on="on">
                           Novo
                           <v-icon class="ml-1">mdi-plus</v-icon>
                         </v-btn>
@@ -85,8 +85,8 @@
 
                     <v-spacer></v-spacer>
 
-                    <v-text-field v-model="search" append-icon="mdi-magnify" label="Pesquisar" color="blue" single-line
-                      hide-details></v-text-field>
+                    <v-text-field v-model="search" class="ml-4" append-icon="mdi-magnify" label="Pesquisar" color="blue"
+                      single-line hide-details></v-text-field>
                   </v-toolbar>
                 </template>
 
@@ -236,7 +236,7 @@ export default {
       this.dialogDelete = false
       this.$nextTick(() => {
         this.deletedIndex = -1
-      }) 
+      })
     },
 
     save() {
@@ -251,7 +251,8 @@ export default {
 
     async UserPost() {
       this.awaitUser = true
-      await UserDataService.create(this.editedItem).then(() => this.listUsers()).then(() => this.showAlertSuccessPost()).then(() => this.awaitUser = false).then(() => this.close())
+      await UserDataService.create(this.editedItem).then(() => this.listUsers()).then(() => this.showAlertSuccessPost())
+        .then(() => this.awaitUser = false).then(() => this.close())
         .catch((e) => {
           this.showAlertErrorPost()
           this.awaitUser = false

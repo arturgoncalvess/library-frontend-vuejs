@@ -6,8 +6,9 @@
           <v-col>
             <v-sheet class="mb-15" rounded="xl" elevation="15">
               <v-data-table :headers="headers" :items="books" :search="search" loading="items"
-                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado."
-                :footer-props="{itemsPerPageText: 'Linhas por página'}" class="rounded-xl pa-3">
+                loading-text="Carregando dados... Aguarde!" no-data-text="Nenhum usuário encontrado." :header-props="{
+                sortByText: 'Ordenar Por'}" :footer-props="{itemsPerPageText: 'Linhas por página'}"
+                class="rounded-xl pa-3">
 
                 <template v-slot:top>
                   <v-toolbar flat class="rounded-xl rounded-b-0">
@@ -57,8 +58,8 @@
                                   </v-text-field>
                                 </template>
 
-                                <v-date-picker v-model="editedItem.launch" locale="pt-br" no-title scrollable color="blue"
-                                  :max="nowDate">
+                                <v-date-picker v-model="editedItem.launch" locale="pt-br" no-title scrollable
+                                  color="blue" :max="nowDate">
 
                                   <v-spacer></v-spacer>
 
@@ -107,8 +108,8 @@
 
                     <v-spacer></v-spacer>
 
-                    <v-text-field v-model="search" append-icon="mdi-magnify" label="Pesquisar" color="blue" single-line
-                      hide-details>
+                    <v-text-field v-model="search" class="ml-4" append-icon="mdi-magnify" label="Pesquisar" color="blue"
+                      single-line hide-details>
                     </v-text-field>
                   </v-toolbar>
                 </template>
@@ -197,7 +198,7 @@ export default {
       required: value => !!value || 'Campo obrigatorio.',
       counter_book: value => value.length <= 120 || 'Max 120 caracteres.',
       counter_author: value => value.length <= 35 || 'Max 35 caracteres.',
-      min_number: value => value >= 0 ||  'Quantity invalid.',
+      min_number: value => value >= 0 || 'Quantity invalid.',
       min_counter: value => value.length >= 3 || 'Min 3 caracteres.',
     },
     valid: false,
@@ -256,7 +257,7 @@ export default {
 
     editDate(date) {
       const [dd, mm, yyyy] = date.split('/');
-      return `${yyyy}-${mm}-${dd}`    
+      return `${yyyy}-${mm}-${dd}`
     },
 
     getColor(quantity) {
